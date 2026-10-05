@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-sidebar: #064e3b;
+  --color-brand-sidebar-hover: #085a44;
+  --color-brand-sidebar-active: #0d5f47;
+  --color-brand-sidebar-indicator: #34d399;
+  --color-brand-primary: #059669;
+  --color-brand-primary-hover: #047857;
+  --color-brand-accent: #10b981;
+  --color-brand-light: #ecfdf5;
+  --color-brand-light-border: #a7f3d0;
+}
+
+@layer base {
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background-color: #f8fafc;
+    color: #0f172a;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  #root {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+}

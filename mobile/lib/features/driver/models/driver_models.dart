@@ -1,0 +1,12 @@
+export 'assignment_detail_model.dart';
+export 'assignment_history_model.dart';
+export 'assignment_summary_model.dart';
+export 'assignment_task_model.dart';
+export 'collection_assignment_status.dart';
+export 'driver_availability_status.dart';
+export 'driver_self_model.dart';
+export 'paged_assignments_model.dart';
+export 'route_read_model.dart';
+export 'route_stop_history_model.dart';
+export 'route_stop_model.dart';
+export 'route_stop_status.dart';

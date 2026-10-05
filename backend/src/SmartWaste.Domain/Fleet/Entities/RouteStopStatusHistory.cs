@@ -1,0 +1,2 @@
+using SmartWaste.Domain.Collection.Enums; using SmartWaste.Domain.Entities; namespace SmartWaste.Domain.Collection.Entities;
+public class RouteStopStatusHistory { public Guid Id {get;set;}=Guid.NewGuid(); public Guid RouteStopId {get;set;} public RouteStop? RouteStop {get;set;} public RouteStopStatus? FromStatus {get;set;} public RouteStopStatus ToStatus {get;set;} public Guid? ChangedByUserId {get;set;} public AppUser? ChangedByUser {get;set;} public string? Notes {get;set;} public DateTime ChangedAt {get;set;}=DateTime.UtcNow; }

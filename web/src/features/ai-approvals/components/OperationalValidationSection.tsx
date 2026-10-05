@@ -1,0 +1,29 @@
+import React from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../../components/ui/Card';
+import type { AgentWorkflowDetail, AgentWorkflowStep, FleetRouteResult, ValidationFinding } from '../types/agentWorkflow';
+import { getOperationalValidationOutput, getValidationOutcomeLabel } from '../utils/workflowDetailPresentation';
+
+const findingClasses = { Info: 'border-slate-200 bg-slate-50 text-slate-700', Warning: 'border-amber-200 bg-amber-50 text-amber-900', Error: 'border-rose-200 bg-rose-50 text-rose-900' };
+
+const FindingList: React.FC<{ findings: ValidationFinding[]; emptyText: string }> = ({ findings, emptyText }) => findings.length === 0 ? <p className="mt-2 text-sm text-slate-500">{emptyText}</p> : <ul className="mt-3 space-y-2">{findings.map((finding) => <li key={`${finding.code}-${finding.message}`} className={`rounded-lg border p-3 text-sm ${findingClasses[finding.severity]}`}><p className="font-semibold">{finding.severity} · {finding.code}</p><p className="mt-1 leading-relaxed">{finding.message}</p>{(finding.relatedTaskIds.length > 0 || finding.relatedDriverId || finding.relatedVehicleId) && <p className="mt-2 text-xs opacity-80">Related references: {[...finding.relatedTaskIds, finding.relatedDriverId, finding.relatedVehicleId].filter((reference): reference is string => Boolean(reference)).join(', ')}</p>}</li>)}</ul>;
+
+export const OperationalValidationSection: React.FC<{ workflow: AgentWorkflowDetail; step: AgentWorkflowStep | null; fleetRoute: FleetRouteResult | null }> = ({ workflow, step, fleetRoute }) => {
+  const output = getOperationalValidationOutput(step);
+  const isInProgress = workflow.status === 'OperationalValidation' && output.kind === 'missing';
+  const failedBeforeCompletion = workflow.status === 'Failed' && workflow.currentStep === 'OperationalValidation' && output.kind === 'missing';
+
+  return <Card><CardHeader><CardTitle>Operational Validation</CardTitle><CardDescription>Advisory validation of the proposed fleet dispatch plan using fresh operational checks.</CardDescription></CardHeader><CardContent>
+    {isInProgress && <p role="status" className="rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">Operational validation is in progress.</p>}
+    {failedBeforeCompletion && <p className="rounded-lg border border-rose-200 bg-rose-50 p-4 text-sm text-rose-900">Operational Validation result unavailable because validation did not complete.</p>}
+    {output.kind === 'missing' && !isInProgress && !failedBeforeCompletion && <p className="text-sm text-slate-500">Operational Validation result unavailable.</p>}
+    {output.kind === 'invalid' && <p className="text-sm text-slate-500">Operational Validation result is unavailable or incompatible with the current format.</p>}
+    {output.kind === 'value' && <div className="space-y-5">
+      {output.value.validationOutcome ? <div className={`rounded-lg border p-4 text-sm ${output.value.validationOutcome === 'ReadyForHumanReview' ? 'border-emerald-200 bg-emerald-50 text-emerald-900' : 'border-amber-200 bg-amber-50 text-amber-900'}`}><p className="font-semibold">{getValidationOutcomeLabel(output.value.validationOutcome)}</p><p className="mt-1 leading-relaxed">{output.value.validationOutcome === 'ReadyForHumanReview' ? 'The dispatch proposal passed operational validation and is ready for an authorized human review.' : 'Operational validation found issues that require the dispatch proposal to be revised.'}</p></div> : <p className="rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">No dispatch proposal required operational validation.</p>}
+      <p className="text-sm leading-relaxed text-slate-700">{output.value.summary}</p>
+      {output.value.planReviews.length > 0 && <section><h3 className="font-semibold text-slate-900">Plan Reviews</h3><div className="mt-3 space-y-3">{output.value.planReviews.map((review) => { const planIndex = fleetRoute?.dispatchPlans.findIndex((plan) => plan.planId === review.planId) ?? -1; return <article key={review.planId} className="rounded-lg border border-slate-200 p-4"><div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between"><div><h4 className="font-semibold text-slate-900">{planIndex >= 0 ? `Dispatch Plan ${planIndex + 1}` : 'Dispatch Plan Review'}</h4><p className="mt-1 text-xs text-slate-500">Reference: {review.planId}</p></div><span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${review.outcome === 'ReadyForHumanReview' ? 'bg-emerald-50 text-emerald-800' : 'bg-amber-50 text-amber-800'}`}>{getValidationOutcomeLabel(review.outcome)}</span></div><p className="mt-3 text-sm leading-relaxed text-slate-600">{review.summary}</p><FindingList findings={review.findings} emptyText="No plan-specific findings were recorded." /></article>; })}</div></section>}
+      {output.value.unplannedTaskFindings.length > 0 && <section><h3 className="font-semibold text-slate-900">Unplanned-task Findings</h3><FindingList findings={output.value.unplannedTaskFindings} emptyText="No unplanned-task findings were recorded." /></section>}
+      {output.value.warnings.length > 0 && <div role="note" className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900"><p className="font-semibold">Operational validation notices</p><ul className="mt-2 list-disc space-y-1 pl-5">{output.value.warnings.map((warning) => <li key={warning}>{warning}</li>)}</ul></div>}
+      {output.value.requiresAcknowledgement && <div role="note" className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900"><p className="font-semibold">Warning acknowledgement required</p><p className="mt-1">Warning acknowledgement will be required before dispatch approval.</p></div>}
+    </div>}
+  </CardContent></Card>;
+};

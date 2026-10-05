@@ -1,0 +1,3 @@
+using FluentValidation; using SmartWaste.Application.Collection.DTOs.Requests;
+namespace SmartWaste.Application.Collection.Validation;
+public sealed class ReorderRouteStopsRequestValidator:AbstractValidator<ReorderRouteStopsRequest>{public ReorderRouteStopsRequestValidator(){RuleFor(x=>x.Stops).NotEmpty().Must(x=>x.Select(s=>s.RouteStopId).Distinct().Count()==x.Count).WithMessage("Stops must be unique.").Must(x=>x.Select(s=>s.Sequence).OrderBy(s=>s).SequenceEqual(Enumerable.Range(1,x.Count))).WithMessage("Sequences must be contiguous from 1.");RuleForEach(x=>x.Stops).ChildRules(s=>s.RuleFor(x=>x.RouteStopId).NotEmpty());}}

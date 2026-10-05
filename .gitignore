@@ -1,0 +1,164 @@
+# =============================================================================
+# SmartWaste — Root .gitignore Specification
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# 1. Operating System & General Temporary Files
+# -----------------------------------------------------------------------------
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+*.tmp
+*.temp
+*.log
+*.bak
+*.swp
+*.swo
+*~
+
+# -----------------------------------------------------------------------------
+# 2. Environment Variables & Secrets
+# -----------------------------------------------------------------------------
+.env
+.env.*
+.env.local
+.env.*.local
+
+
+# Exception: Always preserve example environment and configuration files
+!.env.example
+!.env.*.example
+
+# -----------------------------------------------------------------------------
+# 3. ASP.NET Core & .NET
+# -----------------------------------------------------------------------------
+bin/
+obj/
+TestResults/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.nupkg
+*.snupkg
+.vs/
+_ReSharper*/
+*.CrashDump
+
+# -----------------------------------------------------------------------------
+# 4. React / Node / Vite
+# -----------------------------------------------------------------------------
+node_modules/
+dist/
+dist-ssr/
+build/
+.vite/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+.npm/
+
+# -----------------------------------------------------------------------------
+# 5. Flutter & Dart
+# -----------------------------------------------------------------------------
+.dart_tool/
+.packages
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+doc/api/
+.widget_preview/
+
+# -----------------------------------------------------------------------------
+# 6. Android & Gradle
+# -----------------------------------------------------------------------------
+.gradle/
+local.properties
+key.properties
+captures/
+.cxx/
+**/android/app/debug/
+**/android/app/profile/
+**/android/app/release/
+
+# Android Signing Keys & Keystores
+*.jks
+*.keystore
+
+# Never ignore Gradle wrapper or build definition source files
+!gradle-wrapper.jar
+!gradle-wrapper.properties
+!gradlew
+!gradlew.bat
+!build.gradle
+!build.gradle.kts
+!settings.gradle
+!settings.gradle.kts
+!gradle.properties
+
+# -----------------------------------------------------------------------------
+# 7. Python, FastAPI & LangGraph
+# -----------------------------------------------------------------------------
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Python distribution & packaging
+.Python
+develop-eggs/
+downloads/
+eggs/
+.eggs/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Python Testing & Quality Tools
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+
+# -----------------------------------------------------------------------------
+# 8. IDE & Editor Metadata
+# -----------------------------------------------------------------------------
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# VS Code (ignore local/user state while preserving team configuration)
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# -----------------------------------------------------------------------------
+# 9. Test & Coverage Artifacts
+# -----------------------------------------------------------------------------
+coverage/
+lcov.info
